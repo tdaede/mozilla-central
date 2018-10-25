@@ -50,6 +50,7 @@ jobs:
     definition: debian7-build
     packages:
       - deb7-valgrind
+      - deb7-nasm
     args:
       ARCH: amd64
   debian7-i386-build:
@@ -58,6 +59,7 @@ jobs:
     definition: debian7-build
     packages:
       - deb7-valgrind
+      - deb7-nasm
     args:
       ARCH: i386
   debian7-mozjs-rust-build:

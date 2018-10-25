@@ -27,6 +27,7 @@ RUN apt-get update && \
       gawk \
       gcc-multilib \
       gnupg \
+      nasm \
       p7zip-full \
       procps \
       python-pip \
