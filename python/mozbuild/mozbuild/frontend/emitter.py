@@ -1324,7 +1324,7 @@ class TreeMetadataEmitter(LoggingMixin):
                                         context.get('ASFLAGS'))
 
         if context.get('USE_YASM') is True:
-            if context.config.substs.get('NASM'):
+            if context.config.substs.get('HAVE_NASM'):
                 # prefer using nasm to yasm
                 nasm = context.config.substs.get('NASM')
                 if not nasm:
