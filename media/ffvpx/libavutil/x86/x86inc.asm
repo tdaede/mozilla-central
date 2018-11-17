@@ -870,9 +870,17 @@ BRANCH_INSTR jz, je, jnz, jne, jl, jle, jnl, jnle, jg, jge, jng, jnge, ja, jae, 
     %endif
 
     %if ARCH_X86_64 || cpuflag(sse2)
-        CPUNOP amdnop
+        %ifdef __NASM_VER__
+            ALIGNMODE p6
+        %else
+            CPU amdnop
+        %endif
     %else
-        CPUNOP basicnop
+        %ifdef __NASM_VER__
+            ALIGNMODE nop
+        %else
+            CPU basicnop
+        %endif
     %endif
 %endmacro
 

@@ -79,7 +79,7 @@ linux64-clang-trunk-mingw-x64:
         kind: build
         platform: toolchains/opt
         symbol: TMW(clang-x64)
-        tier: 2
+        tier: 1
     worker-type: aws-provisioner-v1/gecko-{level}-b-linux-xlarge
     worker:
         max-run-time: 7200
@@ -834,3 +834,23 @@ linux64-mingw-fxc2-x86:
         toolchain-artifact: public/build/fxc2.tar.xz
     toolchains:
         - linux64-clang-trunk-mingw-x86
+
+linux64-mingw-nasm-x64:
+    description: "nasm x64 build for MinGW Cross Compile"
+    treeherder:
+        kind: build
+        platform: toolchains/opt
+        symbol: TMW(mingw-nasm-x64)
+        tier: 1
+    worker-type: aws-provisioner-v1/gecko-{level}-b-linux
+    worker:
+        docker-image: {in-tree: mingw32-build}
+        max-run-time: 1800
+    run:
+        using: toolchain-script
+        script: build-nasm.sh
+        resources:
+            - 'taskcluster/scripts/misc/tooltool-download.sh'
+        toolchain-artifact: public/build/nasm.tar.bz2
+    toolchains:
+        - linux64-clang-trunk-mingw-x64
