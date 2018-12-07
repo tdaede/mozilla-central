@@ -868,20 +868,6 @@ BRANCH_INSTR jz, je, jnz, jne, jl, jle, jnl, jnle, jg, jge, jng, jnge, ja, jae, 
             %define movu lddqu
         %endif
     %endif
-
-    %if ARCH_X86_64 || cpuflag(sse2)
-        %ifdef __NASM_VER__
-            ALIGNMODE p6
-        %else
-            CPU amdnop
-        %endif
-    %else
-        %ifdef __NASM_VER__
-            ALIGNMODE nop
-        %else
-            CPU basicnop
-        %endif
-    %endif
 %endmacro
 
 ; Merge mmx, sse*, and avx*
