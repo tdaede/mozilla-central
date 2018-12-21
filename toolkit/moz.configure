@@ -429,21 +429,34 @@ set_config('MOZ_FFMPEG', ffmpeg)
 set_define('MOZ_FFMPEG', ffmpeg)
 imply_option('--enable-fmp4', ffmpeg, '--enable-ffmpeg')
 
-# Libaom AV1 Video Codec Support
+# AV1 Video Codec Support
 # ==============================================================
-option('--enable-av1',
-        help='Enable libaom for av1 video support')
-
-@depends('--enable-av1', target)
-def av1(value, target):
-    enabled = bool(value)
-    if value.origin == 'default':
+with only_when(compile_environment):
+    @depends(target)
+    def av1_default(target):
+        # av1 is disabled on win32
         if target.os == 'WINNT' and target.cpu == 'x86':
-            enabled = False
+            return False
         else:
-            enabled = True
-    if enabled:
-        return True
+            return True
+
+    option('--enable-av1',
+           help='Enable av1 video codec support',
+           default=av1_default)
+
+    @depends('--enable-av1', target, nasm_version)
+    def av1(value, target, nasm_version):
+        enabled = bool(value)
+        if enabled:
+            # we use dav1d instead of libaom on x86_64
+            # except on Windows, OSX, and Android, where ci support is missing
+            use_dav1d = target.cpu == 'x86_64' and target.os not in ['WINNT', 'OSX', 'Android']
+            if use_dav1d:
+                if nasm_version >= '2.13':
+                    return True
+                else:
+                    die('nasm 2.13 or greater is required for AV1 support. '
+                        'Either install nasm or add --disable-av1 to your configure options.')
 
 set_config('MOZ_AV1', av1)
 set_define('MOZ_AV1', av1)
